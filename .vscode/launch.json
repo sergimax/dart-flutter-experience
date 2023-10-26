@@ -5,9 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Dart & Flutter",
+            "name": "dart_project",
+            "cwd": "dart_project",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "program": "bin/dart_project.dart"
         }
     ]
 }
