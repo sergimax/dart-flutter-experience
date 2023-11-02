@@ -10,16 +10,42 @@
 // 3*x+15/(3+2) (результат 33)
 // Опционально можно сделать поддержку отрицательных констант с унарным минусом.
 
+import 'dart:ffi';
+
 class Converter {
   String mathString = '';
 
-  Converter(String lestring) {
-    mathString = lestring;
+  Converter(String text) {
+    mathString = text;
   }
 
-  double convert([Map<String, num>? map]) {
+  double convert([Map<String, num> map = const {}]) {
     double result = 0;
+    var (operands, numbers) = analyze(mathString, map);
+
+    print('analyzed: $operands $numbers');
     return result;
+  }
+
+  (List, List) analyze(String s, [Map<String, num> map = const {}]) {
+    const String operands = '()*/+-';
+    bool isStringHasVariables = map.isEmpty;
+
+    List<String> operandsInString = [];
+    List<num> numbersInString = [];
+
+    for (var i = 0; i < s.length; i++) {
+      print(s[i]);
+      if (operands.contains(s[i])) {
+        operandsInString.add(s[i]);
+      } else {
+        numbersInString.add(int.parse(s[i]));  
+      }
+    }
+
+    print('operandsInString: $operandsInString');
+    print('numbersInString: $numbersInString');
+    return (operandsInString, numbersInString);
   }
 
   /* TODO
@@ -36,9 +62,9 @@ class Converter {
 
 void main() {
   print('hello there!\n');
-  final first = Converter('6 * 7');
+  final first = Converter('1+2');
   print(first);
-  print(first.convert());
+  print(first.convert({'x': 1}));
 
   // print(someStringConverter.convert(map))
 }
