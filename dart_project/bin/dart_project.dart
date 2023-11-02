@@ -53,6 +53,7 @@ class Converter {
     List<num> numbersInString = [];
 
     for (var i = 0; i < s.length; i++) {
+      // TODO two+ symbols in number
       print(s[i]);
       if (possibleOperations.containsKey(s[i])) {
         operationsInString.add(s[i]);
