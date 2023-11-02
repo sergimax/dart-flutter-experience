@@ -14,6 +14,9 @@ import 'dart:ffi';
 
 class Converter {
   String mathString = '';
+  // TODO operations + - * /
+  final String operations = '()*/+-';
+  // TODO ()
 
   Converter(String text) {
     mathString = text;
@@ -21,43 +24,33 @@ class Converter {
 
   double convert([Map<String, num> map = const {}]) {
     double result = 0;
-    var (operands, numbers) = analyze(mathString, map);
+    var (operations, numbers) = analyze(mathString, map);
 
-    print('analyzed: $operands $numbers');
+    print('analyzed: $operations $numbers');
     return result;
   }
 
   (List, List) analyze(String s, [Map<String, num> map = const {}]) {
-    const String operands = '()*/+-';
-    bool isStringHasVariables = map.isEmpty;
+    // TODO variables
+    // bool isStringHasVariables = map.isEmpty;
+    // TODO constants - pi, e
 
-    List<String> operandsInString = [];
+    List<String> operationsInString = [];
     List<num> numbersInString = [];
 
     for (var i = 0; i < s.length; i++) {
       print(s[i]);
-      if (operands.contains(s[i])) {
-        operandsInString.add(s[i]);
+      if (operations.contains(s[i])) {
+        operationsInString.add(s[i]);
       } else {
         numbersInString.add(int.parse(s[i]));  
       }
     }
 
-    print('operandsInString: $operandsInString');
+    print('operationsInString: $operationsInString');
     print('numbersInString: $numbersInString');
-    return (operandsInString, numbersInString);
+    return (operationsInString, numbersInString);
   }
-
-  /* TODO
-    +
-    -
-    *
-    /
-    pi
-    e
-    variables
-    ()
-  */
 }
 
 void main() {
