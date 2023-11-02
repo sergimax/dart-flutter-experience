@@ -31,16 +31,28 @@ class Converter {
     print('analyzed: $operations $numbers');
 
     result = execute(operations, numbers);
-    print(result);
+    print('result $result');
 
     return result;
   }
 
   double execute(List operations, List operands, [bool isPrioritised = false]) {
     double result = 0;
-    for (var operaion in possibleOperations.keys) {
-      print(operaion);
+
+    while (operands.length > 1) {
+      possibleOperations.forEach((key, value) {
+        print(key);
+        var indexOfOperation = operations.indexOf(key);
+        if (indexOfOperation != -1) {
+          operands[indexOfOperation] =
+              value(operands[indexOfOperation], operands[indexOfOperation + 1]);
+          operands.removeAt(indexOfOperation + 1);
+          operations.removeAt(indexOfOperation);
+        }
+      });
     }
+    print(operands[0]);
+    result = operands[0] * 1.0;
     return result;
   }
 
@@ -70,7 +82,7 @@ class Converter {
 
 void main() {
   print('hello there!\n');
-  final first = Converter('1+2*3');
+  final first = Converter('10*5+4/2-1');
   print(first);
   first.convert({'x': 1});
 
