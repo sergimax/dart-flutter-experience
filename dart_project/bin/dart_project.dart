@@ -10,12 +10,15 @@
 // 3*x+15/(3+2) (результат 33)
 // Опционально можно сделать поддержку отрицательных констант с унарным минусом.
 
-import 'dart:ffi';
-
 class Converter {
   String mathString = '';
   // TODO operations + - * /
-  final String operations = '()*/+-';
+  final Map<String, Function> possibleOperations = {
+    '*': (first, second) => first * second,
+    '/': (first, second) => first / second,
+    '+': (first, second) => first + second,
+    '-': (first, second) => first - second,
+  };
   // TODO ()
 
   Converter(String text) {
@@ -25,8 +28,19 @@ class Converter {
   double convert([Map<String, num> map = const {}]) {
     double result = 0;
     var (operations, numbers) = analyze(mathString, map);
-
     print('analyzed: $operations $numbers');
+
+    result = execute(operations, numbers);
+    print(result);
+
+    return result;
+  }
+
+  double execute(List operations, List operands, [bool isPrioritised = false]) {
+    double result = 0;
+    for (var operaion in possibleOperations.keys) {
+      print(operaion);
+    }
     return result;
   }
 
@@ -40,10 +54,10 @@ class Converter {
 
     for (var i = 0; i < s.length; i++) {
       print(s[i]);
-      if (operations.contains(s[i])) {
+      if (possibleOperations.containsKey(s[i])) {
         operationsInString.add(s[i]);
       } else {
-        numbersInString.add(int.parse(s[i]));  
+        numbersInString.add(int.parse(s[i]));
       }
     }
 
@@ -55,9 +69,9 @@ class Converter {
 
 void main() {
   print('hello there!\n');
-  final first = Converter('1+2');
+  final first = Converter('1+2*3');
   print(first);
-  print(first.convert({'x': 1}));
+  first.convert({'x': 1});
 
   // print(someStringConverter.convert(map))
 }
