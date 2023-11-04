@@ -64,12 +64,20 @@ class Converter {
     List<String> operationsInString = [];
     List<num> numbersInString = [];
 
+    String numberPart = '';
     for (var i = 0; i < s.length; i++) {
+
       // TODO two+ symbols in number
       if (possibleOperations.containsKey(s[i])) {
+        if (numberPart.isNotEmpty) {
+          numbersInString.add(int.parse(numberPart));
+          numberPart = '';
+        }
         operationsInString.add(s[i]);
-      } else {
-        numbersInString.add(int.parse(s[i]));
+      } else if (s[i] == '(' || s[i] == ')') {
+        operationsInString.add(s[i]);
+      } else{
+        numberPart += s[i];
       }
     }
 
