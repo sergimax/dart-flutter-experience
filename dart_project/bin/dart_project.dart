@@ -76,7 +76,7 @@ class Converter {
     String numberPart = '';
     for (var i = 0; i < s.length; i++) {
 
-      // TODO two+ symbols in number
+      // TODO numbers addition as function
       if (possibleOperations.containsKey(s[i])) {
         if (numberPart.isNotEmpty) {
           numbersInString.add(int.parse(numberPart));
@@ -98,8 +98,8 @@ class Converter {
       }
     }
 
-    print('operationsInString: $operationsInString');
-    print('numbersInString: $numbersInString');
+    print('operationsInString: \t ${operationsInString.length} \t $operationsInString');
+    print('numbersInString: \t ${numbersInString.length} \t $numbersInString');
     return (operationsInString, numbersInString);
   }
 }
