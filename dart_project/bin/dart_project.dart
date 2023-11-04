@@ -10,6 +10,15 @@
 // 3*x+15/(3+2) (результат 33)
 // Опционально можно сделать поддержку отрицательных констант с унарным минусом.
 
+enum NodeType {
+  operation,
+  constant,
+  variable
+}
+
+class Node {
+  
+}
 class Converter {
   String mathString = '';
   // TODO operations + - * /
