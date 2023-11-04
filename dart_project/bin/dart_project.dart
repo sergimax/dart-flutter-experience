@@ -66,7 +66,6 @@ class Converter {
 
     for (var i = 0; i < s.length; i++) {
       // TODO two+ symbols in number
-      print(s[i]);
       if (possibleOperations.containsKey(s[i])) {
         operationsInString.add(s[i]);
       } else {
@@ -81,10 +80,7 @@ class Converter {
 }
 
 void main() {
-  print('hello there!\n');
   final first = Converter('10*5+4/2-1');
-  print(first);
   first.convert({'x': 1});
-
   // print(someStringConverter.convert(map))
 }
