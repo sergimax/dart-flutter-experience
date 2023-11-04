@@ -17,8 +17,9 @@ enum NodeType {
 }
 
 class Node {
-  
+
 }
+
 class Converter {
   String mathString = '';
   // TODO operations + - * /
@@ -36,10 +37,12 @@ class Converter {
 
   double convert([Map<String, num> map = const {}]) {
     double result = 0;
-    var (operations, numbers) = analyze(mathString, map);
-    print('analyzed: $operations $numbers');
+    // var (operations, numbers) = analyze(mathString, map);
 
-    result = execute(operations, numbers);
+    List expressionInPolishNotation = convertToPolishNotation(mathString);
+    print('expressionInPolishNotation: ${expressionInPolishNotation}');
+
+    // result = execute(operations, numbers);
     print('result $result');
 
     return result;
@@ -75,16 +78,17 @@ class Converter {
 
     String numberPart = '';
     for (var i = 0; i < s.length; i++) {
-
       // TODO numbers addition as function
       if (possibleOperations.containsKey(s[i])) {
         if (numberPart.isNotEmpty) {
           numbersInString.add(int.parse(numberPart));
           numberPart = '';
         }
+
         operationsInString.add(s[i]);
       } else if (s[i] == '(' || s[i] == ')') {
         operationsInString.add(s[i]);
+
         if (numberPart.isNotEmpty) {
           numbersInString.add(int.parse(numberPart));
           numberPart = '';
@@ -98,14 +102,66 @@ class Converter {
       }
     }
 
-    print('operationsInString: \t ${operationsInString.length} \t $operationsInString');
+    print(
+        'operationsInString: \t ${operationsInString.length} \t $operationsInString');
     print('numbersInString: \t ${numbersInString.length} \t $numbersInString');
     return (operationsInString, numbersInString);
   }
-}
 
+  List convertToPolishNotation(String expression) {
+    List result = [];
+    expression = '(' + expression + ')';
+    print(expression);
+    String numberPart = '';
+    int priorityLevel = 0;
+    List stack = [];
+
+    bool addNumber(String part) {
+      if (numberPart.isEmpty) return false; 
+      // result.add(part);
+      numberPart = '';
+      stack.add(part);
+      return true;
+    }
+
+    for (var i = 0; i < expression.length; i++) {
+      print('');
+      var symbol = expression[i];
+      
+      if (!'+-/*()'.contains(symbol)) {
+        print('${symbol} \tnumber');
+        numberPart += symbol;
+        if (i + 1 == expression.length || '+-/*()'.contains(expression[i+1])) {
+          addNumber(numberPart);
+        }
+      }
+      
+      else if (symbol == '(') {
+        print('${symbol} \topen bracket');
+        priorityLevel++;
+      }
+
+      else if (symbol == ')') {
+        priorityLevel--;
+        print('${symbol} \tclose bracket');
+      }
+
+      else {
+        print('${symbol} \toperation');
+        result.add(symbol);
+        // stack.add(symbol);
+      }
+
+      print('${stack} ${result}');
+    }
+
+    print(stack.join(''));
+    print(result.join(','));
+    return result;
+  }
+}
 void main() {
-  final first = Converter('10*5+4/2-1*23-(2*2)');
+  final first = Converter('10+2*3');
   first.convert({'x': 1});
   // print(someStringConverter.convert(map))
 }
