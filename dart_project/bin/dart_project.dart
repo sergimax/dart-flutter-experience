@@ -76,8 +76,16 @@ class Converter {
         operationsInString.add(s[i]);
       } else if (s[i] == '(' || s[i] == ')') {
         operationsInString.add(s[i]);
-      } else{
+        if (numberPart.isNotEmpty) {
+          numbersInString.add(int.parse(numberPart));
+          numberPart = '';
+        }
+      } else {
         numberPart += s[i];
+        if (i + 1 == s.length) {
+          numbersInString.add(int.parse(numberPart));
+          numberPart = '';
+        }
       }
     }
 
@@ -88,7 +96,7 @@ class Converter {
 }
 
 void main() {
-  final first = Converter('10*5+4/2-1');
+  final first = Converter('10*5+4/2-1*23-(2*2)');
   first.convert({'x': 1});
   // print(someStringConverter.convert(map))
 }
