@@ -1,16 +1,16 @@
 import 'package:dart_project/enum_symbol_type.dart';
 
 class Node {
-  late TokenType nodeType;
+  late String token;
   List<Node> arguments = [];
 
-  Node(TokenType type);
-  Node.unary(TokenType type, Node argument) {
-    nodeType = type;
+  Node(String type);
+  Node.unary(String type, Node argument) {
+    token = type;
     arguments.add(argument);
   }
-  Node.binary(TokenType type, Node argumentA, Node argumentB) {
-    nodeType = type;
+  Node.binary(String type, Node argumentA, Node argumentB) {
+    token = type;
     arguments.add(argumentA);
     arguments.add(argumentB);
   }
@@ -19,11 +19,11 @@ class Node {
     return arguments;
   }
   
-  TokenType getNodeType() {
-    return nodeType;
+  String getNodeType() {
+    return token;
   }
 
   void printValues() {
-    print('${nodeType.name} $arguments');
+    print('${token} $arguments');
   }
 }
