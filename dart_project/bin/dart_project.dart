@@ -1,5 +1,6 @@
 import 'package:dart_project/Converter.dart';
 
 void main() {
-  final line = Converter('1+2*3');
+  final line = Converter('10+2*3');
+  line.convert();
 }
