@@ -1,6 +1,6 @@
 import 'package:dart_project/Converter.dart';
+import 'package:dart_project/Parser.dart';
 
 void main() {
-  final line = Converter('10+2*3');
-  line.convert();
+  Parser parser = Parser('10+2*3');
 }
