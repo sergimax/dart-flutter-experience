@@ -5,11 +5,19 @@ class Parser {
   String unparsedLine;
   int cursor = 0;
   Parser(this.unparsedLine);
-  // Node parse();
+
+  void parse(){
+    while (cursor < unparsedLine.length) {
+      print(parseToken());
+    }
+  }
+
   String parseToken() {
+    // print(unparsedLine[cursor]);
+    
     if (isDigit(unparsedLine[cursor])) {
       String value = '';
-      while (isDigit(unparsedLine[cursor])) {
+      while (cursor < unparsedLine.length && isDigit(unparsedLine[cursor])) {
           value += unparsedLine[cursor];
           cursor++;
       }
