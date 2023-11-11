@@ -4,6 +4,6 @@ enum TokenType {
   multiplication,
   division,
   value,
-  open_parenthesis,
-  closed_parenthesis
+  openParenthesis,
+  closedParenthesis
 }
