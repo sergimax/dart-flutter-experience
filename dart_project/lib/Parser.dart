@@ -36,6 +36,10 @@ class Parser {
         return TokenType.multiplication;
       case '/':
         return TokenType.division;
+      case '(':
+        return TokenType.open_parenthesis;
+      case ')':
+        return TokenType.closed_parenthesis;
       default:
         return TokenType.value;
     }
