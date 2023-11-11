@@ -15,7 +15,12 @@ class Parser {
       }
       return value;
     }
-
+    
+    TokenType type = getSymbolType(unparsedLine[cursor]);
+    cursor++;
+    if (type != TokenType.unknown) {
+      return type.name;
+    }
 
     return '';
   }
@@ -41,7 +46,7 @@ class Parser {
       case ')':
         return TokenType.closedParenthesis;
       default:
-        return TokenType.value;
+        return TokenType.unknown;
     }
   }
 }

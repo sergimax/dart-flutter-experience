@@ -5,5 +5,6 @@ enum TokenType {
   division,
   value,
   openParenthesis,
-  closedParenthesis
+  closedParenthesis,
+  unknown
 }
