@@ -1,6 +1,70 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
+abstract class Renderable {
+  Size? size;
+
+  void render(Canvas canvas, Offset offset);
+  void layout(BoxConstraints constraints);
+}
+
+class OtusColumn extends Renderable {
+  List<Renderable> children;
+  OtusColumn({required this.children});
+
+  List<Offset> offsets = [];
+
+  @override
+  void render(ui.Canvas canvas, ui.Offset offset) {
+    for (final child in children.indexed) {
+      // из-за того что indexed - первый это индекс
+      child.$2.render(canvas, offsets[child.$1] + offset);
+    }
+  }
+
+  @override
+  void layout(BoxConstraints constraints) {
+    size = constraints.biggest;
+    double y = 0.0;
+    double deltaY = size!.height / children.length;
+    for (final child in children) {
+      // опрос размера
+      child.layout(BoxConstraints(
+          minWidth: 0,
+          minHeight: 0,
+          maxHeight: deltaY,
+          maxWidth: size!.width)
+      );
+
+      offsets.add(Offset(0, y));
+      y += deltaY;
+    }
+  }
+}
+
+class ColorfulRectangle extends Renderable {
+  ui.Color color;
+  Size? size;
+  ColorfulRectangle({required this.color});
+
+  @override
+  void render(Canvas canvas, Offset offset) {
+    if (size != null) {
+      final rect = offset & size!;
+      final paint = ui.Paint()..color = color;
+      canvas.drawRect(rect, paint);
+    }
+  }
+
+  void layout(BoxConstraints constraints) {
+    size = constraints.biggest;
+  }
+}
+
+class Renderer {
+  Renderable root;
+}
+
 void main() {
   print('\n\n\nhello world');
   // runApp(const MyApp());
@@ -11,8 +75,8 @@ void main() {
   print(w.display.size);
   print(DateTime.timestamp());
 
-  double X = 0, Y = 0;
-  int counter = 10;
+  // double X = 0, Y = 0;
+  // int counter = 10;
 
   w.onDrawFrame = () {
     print('onDrawFrame');
@@ -20,40 +84,61 @@ void main() {
     final recorder = ui.PictureRecorder();
     final c = ui.Canvas(recorder);
 
-    final rect = const ui.Offset(30, 30) & const ui.Size(100, 100);
+    // final rect = const ui.Offset(30, 30) & const ui.Size(100, 100);
     // аналогично
     // final rect2 = ui.Rect.fromLTWH(16, 16, 100, 100);
 
-    final paint = ui.Paint()..color = const ui.Color(0xFFFF00FF);
+    // final paint = ui.Paint()..color = const ui.Color(0xFFFF00FF);
     // .. это каскадный оператор
     // A().func(). - работа с func()
     // A().func().. - работа с A()
 
     // Отрисовка в памяти
-    c.drawRect(rect, paint);
+    // c.drawRect(rect, paint);
 
     // Итоговое изображение
-    final picture = recorder.endRecording();
+    // final picture = recorder.endRecording();
     // преобразование в растр
-    final p = picture.toImageSync(128, 128);
+    // final p = picture.toImageSync(128, 128);
 
     // формирование сцены
     final s = ui.SceneBuilder();
-    s.addPicture(Offset(X, Y), picture);
-    s.pop();
-    X+=10;
-    Y+=10;
+
+
+    final app = [
+      ColorfulRectangle(color: Color.fromRGBO(0xFF, 0, 0, 1.0)),
+      ColorfulRectangle(color: Color.fromRGBO(0xFF, 0xFF, 0, 1.0)),
+      ColorfulRectangle(color: Color.fromRGBO(0, 0xFF, 0xFF, 1.0))
+    ];
+
+    w.onPointerDataPacket = (p) {
+      print(p);
+    };
+
+    final height = w.display.size.height;
+    final width = w.display.size.width;
+
+    final column = OtusColumn(children: (app));
+    column.layout(BoxConstraints.tightFor(width: width, height: height));
+    column.render(c, Offset.zero);
+    final picturee = recorder.endRecording();
+
+    s.addPicture(Offset(20, 20), picturee);
+    // s.pop();
+    // X+=10;
+    // Y+=10;
 
     // print(s);
 
     final scene = s.build();
     // нанесение на window
     w.render(scene);
+    // w.scheduleFrame();
 
-    if (counter > 0) {
-      counter--;
-      w.scheduleFrame();
-    }
+    // if (counter > 0) {
+    //   counter--;
+    //   w.scheduleFrame();
+    // }
   };
 
   w.scheduleFrame();
